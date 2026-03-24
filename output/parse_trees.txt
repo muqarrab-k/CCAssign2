@@ -1,0 +1,158 @@
+Input String: id + id * id
+--- Parse Tree ---
+Expr
+  Term
+    Factor
+      id
+    TermDash
+      ε
+  ExprDash
+    +
+    Term
+      Factor
+        id
+      TermDash
+        *
+        Factor
+          id
+        TermDash
+          ε
+    ExprDash
+      ε
+
+==================================================
+
+Input String: ( id + id ) * id
+--- Parse Tree ---
+Expr
+  Term
+    Factor
+      (
+      Expr
+        Term
+          Factor
+            id
+          TermDash
+            ε
+        ExprDash
+          +
+          Term
+            Factor
+              id
+            TermDash
+              ε
+          ExprDash
+            ε
+      )
+    TermDash
+      *
+      Factor
+        id
+      TermDash
+        ε
+  ExprDash
+    ε
+
+==================================================
+
+Input String: id
+--- Parse Tree ---
+Expr
+  Term
+    Factor
+      id
+    TermDash
+      ε
+  ExprDash
+    ε
+
+==================================================
+
+Input String: id * ( id + id )
+--- Parse Tree ---
+Expr
+  Term
+    Factor
+      id
+    TermDash
+      *
+      Factor
+        (
+        Expr
+          Term
+            Factor
+              id
+            TermDash
+              ε
+          ExprDash
+            +
+            Term
+              Factor
+                id
+              TermDash
+                ε
+            ExprDash
+              ε
+        )
+      TermDash
+        ε
+  ExprDash
+    ε
+
+==================================================
+
+Input String: id + * id
+--- Parse Tree ---
+Expr
+  Term
+    Factor
+      id
+    TermDash
+      ε
+  ExprDash
+    +
+    Term
+    ExprDash
+      ε
+
+==================================================
+
+Input String: ( id + id * id
+--- Parse Tree ---
+Expr
+  Term
+    Factor
+      (
+      Expr
+        Term
+          Factor
+            id
+          TermDash
+            ε
+        ExprDash
+          +
+          Term
+            Factor
+              id
+            TermDash
+              *
+              Factor
+                id
+              TermDash
+                ε
+          ExprDash
+            ε
+      )
+    TermDash
+      ε
+  ExprDash
+    ε
+
+==================================================
+
+Input String: + id * id
+--- Parse Tree ---
+Expr
+
+==================================================
+

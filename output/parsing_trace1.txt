@@ -1,0 +1,110 @@
+>>> Valid Inputs Trace
+
+
+Parsing String: id + id * id
+Step  | Stack                          | Remaining Input      | Action
+-------------------------------------------------------------------------------------
+1     | [$, Expr]                      | id + id * id $       | Expr -> Term ExprDash
+2     | [$, ExprDash, Term]            | id + id * id $       | Term -> Factor TermDash
+3     | [$, ExprDash, TermDash, Factor] | id + id * id $       | Factor -> id
+4     | [$, ExprDash, TermDash, id]    | id + id * id $       | Match id
+5     | [$, ExprDash, TermDash]        | + id * id $          | TermDash -> epsilon
+6     | [$, ExprDash]                  | + id * id $          | ExprDash -> + Term ExprDash
+7     | [$, ExprDash, Term, +]         | + id * id $          | Match +
+8     | [$, ExprDash, Term]            | id * id $            | Term -> Factor TermDash
+9     | [$, ExprDash, TermDash, Factor] | id * id $            | Factor -> id
+10    | [$, ExprDash, TermDash, id]    | id * id $            | Match id
+11    | [$, ExprDash, TermDash]        | * id $               | TermDash -> * Factor TermDash
+12    | [$, ExprDash, TermDash, Factor, *] | * id $               | Match *
+13    | [$, ExprDash, TermDash, Factor] | id $                 | Factor -> id
+14    | [$, ExprDash, TermDash, id]    | id $                 | Match id
+15    | [$, ExprDash, TermDash]        | $                    | TermDash -> epsilon
+16    | [$, ExprDash]                  | $                    | ExprDash -> epsilon
+17    | [$]                            | $                    | Accept
+
+RESULT: String Accepted Successfully!
+
+*************************************************************************************
+
+
+Parsing String: ( id + id ) * id
+Step  | Stack                          | Remaining Input      | Action
+-------------------------------------------------------------------------------------
+1     | [$, Expr]                      | ( id + id ) * id $   | Expr -> Term ExprDash
+2     | [$, ExprDash, Term]            | ( id + id ) * id $   | Term -> Factor TermDash
+3     | [$, ExprDash, TermDash, Factor] | ( id + id ) * id $   | Factor -> ( Expr )
+4     | [$, ExprDash, TermDash, ), Expr, (] | ( id + id ) * id $   | Match (
+5     | [$, ExprDash, TermDash, ), Expr] | id + id ) * id $     | Expr -> Term ExprDash
+6     | [$, ExprDash, TermDash, ), ExprDash, Term] | id + id ) * id $     | Term -> Factor TermDash
+7     | [$, ExprDash, TermDash, ), ExprDash, TermDash, Factor] | id + id ) * id $     | Factor -> id
+8     | [$, ExprDash, TermDash, ), ExprDash, TermDash, id] | id + id ) * id $     | Match id
+9     | [$, ExprDash, TermDash, ), ExprDash, TermDash] | + id ) * id $        | TermDash -> epsilon
+10    | [$, ExprDash, TermDash, ), ExprDash] | + id ) * id $        | ExprDash -> + Term ExprDash
+11    | [$, ExprDash, TermDash, ), ExprDash, Term, +] | + id ) * id $        | Match +
+12    | [$, ExprDash, TermDash, ), ExprDash, Term] | id ) * id $          | Term -> Factor TermDash
+13    | [$, ExprDash, TermDash, ), ExprDash, TermDash, Factor] | id ) * id $          | Factor -> id
+14    | [$, ExprDash, TermDash, ), ExprDash, TermDash, id] | id ) * id $          | Match id
+15    | [$, ExprDash, TermDash, ), ExprDash, TermDash] | ) * id $             | TermDash -> epsilon
+16    | [$, ExprDash, TermDash, ), ExprDash] | ) * id $             | ExprDash -> epsilon
+17    | [$, ExprDash, TermDash, )]     | ) * id $             | Match )
+18    | [$, ExprDash, TermDash]        | * id $               | TermDash -> * Factor TermDash
+19    | [$, ExprDash, TermDash, Factor, *] | * id $               | Match *
+20    | [$, ExprDash, TermDash, Factor] | id $                 | Factor -> id
+21    | [$, ExprDash, TermDash, id]    | id $                 | Match id
+22    | [$, ExprDash, TermDash]        | $                    | TermDash -> epsilon
+23    | [$, ExprDash]                  | $                    | ExprDash -> epsilon
+24    | [$]                            | $                    | Accept
+
+RESULT: String Accepted Successfully!
+
+*************************************************************************************
+
+
+Parsing String: id
+Step  | Stack                          | Remaining Input      | Action
+-------------------------------------------------------------------------------------
+1     | [$, Expr]                      | id $                 | Expr -> Term ExprDash
+2     | [$, ExprDash, Term]            | id $                 | Term -> Factor TermDash
+3     | [$, ExprDash, TermDash, Factor] | id $                 | Factor -> id
+4     | [$, ExprDash, TermDash, id]    | id $                 | Match id
+5     | [$, ExprDash, TermDash]        | $                    | TermDash -> epsilon
+6     | [$, ExprDash]                  | $                    | ExprDash -> epsilon
+7     | [$]                            | $                    | Accept
+
+RESULT: String Accepted Successfully!
+
+*************************************************************************************
+
+
+Parsing String: id * ( id + id )
+Step  | Stack                          | Remaining Input      | Action
+-------------------------------------------------------------------------------------
+1     | [$, Expr]                      | id * ( id + id ) $   | Expr -> Term ExprDash
+2     | [$, ExprDash, Term]            | id * ( id + id ) $   | Term -> Factor TermDash
+3     | [$, ExprDash, TermDash, Factor] | id * ( id + id ) $   | Factor -> id
+4     | [$, ExprDash, TermDash, id]    | id * ( id + id ) $   | Match id
+5     | [$, ExprDash, TermDash]        | * ( id + id ) $      | TermDash -> * Factor TermDash
+6     | [$, ExprDash, TermDash, Factor, *] | * ( id + id ) $      | Match *
+7     | [$, ExprDash, TermDash, Factor] | ( id + id ) $        | Factor -> ( Expr )
+8     | [$, ExprDash, TermDash, ), Expr, (] | ( id + id ) $        | Match (
+9     | [$, ExprDash, TermDash, ), Expr] | id + id ) $          | Expr -> Term ExprDash
+10    | [$, ExprDash, TermDash, ), ExprDash, Term] | id + id ) $          | Term -> Factor TermDash
+11    | [$, ExprDash, TermDash, ), ExprDash, TermDash, Factor] | id + id ) $          | Factor -> id
+12    | [$, ExprDash, TermDash, ), ExprDash, TermDash, id] | id + id ) $          | Match id
+13    | [$, ExprDash, TermDash, ), ExprDash, TermDash] | + id ) $             | TermDash -> epsilon
+14    | [$, ExprDash, TermDash, ), ExprDash] | + id ) $             | ExprDash -> + Term ExprDash
+15    | [$, ExprDash, TermDash, ), ExprDash, Term, +] | + id ) $             | Match +
+16    | [$, ExprDash, TermDash, ), ExprDash, Term] | id ) $               | Term -> Factor TermDash
+17    | [$, ExprDash, TermDash, ), ExprDash, TermDash, Factor] | id ) $               | Factor -> id
+18    | [$, ExprDash, TermDash, ), ExprDash, TermDash, id] | id ) $               | Match id
+19    | [$, ExprDash, TermDash, ), ExprDash, TermDash] | ) $                  | TermDash -> epsilon
+20    | [$, ExprDash, TermDash, ), ExprDash] | ) $                  | ExprDash -> epsilon
+21    | [$, ExprDash, TermDash, )]     | ) $                  | Match )
+22    | [$, ExprDash, TermDash]        | $                    | TermDash -> epsilon
+23    | [$, ExprDash]                  | $                    | ExprDash -> epsilon
+24    | [$]                            | $                    | Accept
+
+RESULT: String Accepted Successfully!
+
+*************************************************************************************
+

@@ -1,0 +1,14 @@
+
+FIRST Sets
+FIRST(Expr) = { (, id }
+FIRST(Term) = { (, id }
+FIRST(Factor) = { (, id }
+FIRST(ExprDash) = { +, epsilon }
+FIRST(TermDash) = { *, epsilon }
+
+FOLLOW Sets
+FOLLOW(Expr) = { $, ) }
+FOLLOW(Term) = { +, $, ) }
+FOLLOW(Factor) = { *, +, $, ) }
+FOLLOW(ExprDash) = { $, ) }
+FOLLOW(TermDash) = { +, $, ) }

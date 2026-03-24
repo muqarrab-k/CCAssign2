@@ -1,0 +1,7 @@
+
+--- Grammar ---
+Expr -> Term ExprDash 
+Term -> Factor TermDash 
+Factor -> ( Expr ) | id 
+ExprDash -> + Term ExprDash | epsilon 
+TermDash -> * Factor TermDash | epsilon 

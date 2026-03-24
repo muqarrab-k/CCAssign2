@@ -1,0 +1,10 @@
+
+LL(1) Parsing Table
+               (              )              id             +              *              $              
+Expr           Term ExprDash                 Term ExprDash                                               
+Term           Factor TermDash               Factor TermDash                                             
+Factor         ( Expr )                      id                                                          
+ExprDash                      epsilon                       + Term ExprDash               epsilon        
+TermDash                      epsilon                       epsilon        * Factor TermDashepsilon        
+
+Is Grammar LL(1)? YES
