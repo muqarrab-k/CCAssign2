@@ -1,19 +1,22 @@
 import java.util.ArrayList;
 
-public class Parser {
+public class Parser
+{
     private Grammar grammar;
     private FirstFollow ff;
     public String[][] parsingTable;
-    public boolean isLL1 = true;
+    public boolean isLL1 = true; //to check that a cell doesnt contain more than one prod rule
 
-    public Parser(Grammar g, FirstFollow ff) {
+    public Parser(Grammar g, FirstFollow ff)
+    {
         this.grammar = g;
         this.ff = ff;
     }
 
-    public void parseInput(String inputLine) {
+    public void parseInput(String input)
+    {
         // Task 2.1: Split by space and add the EOF marker ($)
-        String[] tokens = (inputLine + " $").split("\\s+");
+        String[] tokens = (input + " $").split("\\s+");
         int ip = 0; // Input Pointer
 
         Stack stack = new Stack();
@@ -26,7 +29,7 @@ public class Parser {
         treeStack.push(null); // End marker
         treeStack.push(root);
 
-        System.out.println("\nParsing String: " + inputLine);
+        System.out.println("\nParsing String: " + input);
         
         // Task 2.3: Table Header Formatting
         System.out.printf("%-5s | %-30s | %-20s | %s\n", "Step", "Stack", "Remaining Input", "Action");
@@ -35,20 +38,25 @@ public class Parser {
         int step = 1;
 
         // Follow the Parsing Algorithm (Task 4.3)
-        while (!stack.isEmpty()) {
+        while (!stack.isEmpty())
+        {
             String X = stack.top();
             String a = (ip < tokens.length) ? tokens[ip] : "$";
 
             // Calculate remaining input for display
             StringBuilder remaining = new StringBuilder();
-            for (int i = ip; i < tokens.length; i++) remaining.append(tokens[i]).append(" ");
+
+            for (int i = ip; i < tokens.length; i++)
+                remaining.append(tokens[i]).append(" ");
 
             // Print the current step's state (wait to print Action and \n)
             System.out.printf("%-5d | %-30s | %-20s | ", step++, stack.toString(), remaining.toString().trim());
 
-            // LOGIC: Case 1 - Match
-            if (X.equals(a)) {
-                if (X.equals("$")) {
+            //Match
+            if (X.equals(a))
+            {
+                if (X.equals("$"))
+                {
                     System.out.println("Accept");
                     System.out.println("\nRESULT: String Accepted Successfully!");
                     System.out.println("--- Parse Tree ---");
@@ -59,30 +67,35 @@ public class Parser {
                 stack.pop();
                 treeStack.pop();
                 ip++;
-            } 
-            // LOGIC: Case 2 - Non-Terminal Expansion
-            else if (grammar.isNonTerminal(X)) {
+            }
+            //nonterminal Expansion
+            else if (grammar.isNonTerminal(X))
+            {
                 int row = grammar.findNonTerminalIndex(X);
                 int col = grammar.terminals.indexOf(a);
 
-                if (col == -1 || parsingTable[row][col].isEmpty()) {
+                if (col == -1 || parsingTable[row][col].isEmpty())
+                {
                     // Task 2.4: Error Recovery - Empty Table Entry / Unexpected Symbol
                     System.out.println("ERROR!");
                     ErrorHandler.reportError(ip, "Valid production for " + X, a, "Empty Table Entry / Unexpected Symbol");
                     
                     // Panic Mode: Skip tokens until follow set is met
-                    ip = ErrorHandler.panicModeRecover(X, ff.followSets.get(row), tokens, ip);
+                    ip = ErrorHandler.panicRecover(X, ff.follow.get(row), tokens, ip);
                     stack.pop();
                     treeStack.pop();
-                } else {
+                }
+                else
+                {
                     String production = parsingTable[row][col];
                     System.out.println(X + " -> " + production);
                     expand(stack, treeStack, production);
                 }
-            } 
-            // LOGIC: Case 3 - Terminal Mismatch
-            else {
-                // Task 2.4: Error Recovery - Missing Symbol
+            }
+            //Terminal Mismatch
+            else
+            {
+                //Error Recovery
                 System.out.println("ERROR!");
                 ErrorHandler.reportError(ip, X, a, "Missing Symbol");
                 System.out.println("    [Recovery] Popping expected terminal '" + X + "' from stack.");
@@ -91,22 +104,24 @@ public class Parser {
             }
         }
     }
-    private void expand(Stack stack, java.util.Stack<Tree> treeStack, String productionStr) {
-        // 1. Remove the Non-Terminal we are currently expanding
+    private void expand(Stack stack, java.util.Stack<Tree> treeStack, String productionStr)
+    {
+        //Remove the Non-Terminal we are currently expanding
         stack.pop();
         Tree currentNode = treeStack.pop();
 
-        // 2. Handle Epsilon cases
-        if (productionStr.equals("epsilon") || productionStr.equals("@") || productionStr.isEmpty()) {
-            currentNode.addChild(new Tree("ε"));
+        //Epsilon cases
+        if (productionStr.equals("epsilon") || productionStr.equals("@") || productionStr.isEmpty())
+        {
+            currentNode.addchild(new Tree("ε"));
             return;
         }
 
-        // 3. Split the production (e.g., "Term ExprDash" -> ["Term", "ExprDash"])
+        //Split the production
         String[] symbols = productionStr.split("\\s+");
 
-        // 4. Push to stack in REVERSE order (Task 4.3)
-        // So if rule is A -> B C, C goes on stack first, then B is on top.
+        //ush to stack in REVERSE order (Task 4.3)
+        // if rule is A -> B C, C goes on stack first, then B is on top.
         for (int i = symbols.length - 1; i >= 0; i--) {
             String s = symbols[i];
             stack.push(s);
@@ -114,14 +129,15 @@ public class Parser {
             // Create tree node and sync with treeStack
             Tree child = new Tree(s);
             // We add to index 0 so the tree displays in correct left-to-right order
-            currentNode.children.add(0, child); 
+            currentNode.children.add(0, child);
             treeStack.push(child);
         }
     }
 
-    public void buildParsingTable() {
-
-        if (!grammar.terminals.contains("$")) {
+    public void buildParsingTable()
+    {
+        if (!grammar.terminals.contains("$"))
+        {
             grammar.terminals.add("$");
         }
 
@@ -129,8 +145,7 @@ public class Parser {
         int cols = grammar.terminals.size();
         parsingTable = new String[rows][cols];
 
-
-        for (int i = 0; i < rows; i++) 
+        for (int i = 0; i < rows; i++)
         {
             for (int j = 0; j < cols; j++)
             {
@@ -139,32 +154,33 @@ public class Parser {
         }
 
 
-        for (int i = 0; i < grammar.nonTerminals.size(); i++) 
-            {
+        for (int i = 0; i < grammar.nonTerminals.size(); i++)
+        {
             ArrayList<ArrayList<String>> productions = grammar.allRules.get(i);
 
-            for (ArrayList<String> alpha : productions) 
-                {
+            for (ArrayList<String> alpha : productions)
+            {
               //get first alpha
-                ArrayList<String> firstAlpha = ff.getFirstOfSequence(alpha);
+                ArrayList<String> firstAlpha = ff.firstofsequence(alpha);
 
-                for (String a : firstAlpha) 
+                for (String a : firstAlpha)
+                {
+                    if (!a.equals("epsilon") && !a.equals("@"))
                     {
-                    if (!a.equals("epsilon") && !a.equals("@")) {
-                   
                         int colIndex = grammar.terminals.indexOf(a);
-                        if (colIndex != -1) {
+                        if (colIndex != -1)
+                        {
                             addToTable(i, colIndex, alpha);
                         }
-                    } 
-                    else 
+                    }
+                    else
                     {
-
-                        ArrayList<String> followA = ff.followSets.get(i);
-                        for (String b : followA) 
+                        ArrayList<String> followA = ff.follow.get(i);
+                        for (String b : followA)
                         {
                             int colIndex = grammar.terminals.indexOf(b);
-                            if (colIndex != -1) {
+                            if (colIndex != -1)
+                            {
                                 addToTable(i, colIndex, alpha);
                             }
                         }
@@ -175,35 +191,38 @@ public class Parser {
     }
 
     // this is helper ftn to avid conflicr
-    private void addToTable(int row, int col, ArrayList<String> production) {
+    private void addToTable(int row, int col, ArrayList<String> production)
+    {
         String prodStr = String.join(" ", production);
         
-        if (!parsingTable[row][col].isEmpty() && !parsingTable[row][col].equals(prodStr)) 
-            {
-            
+        if (!parsingTable[row][col].isEmpty() && !parsingTable[row][col].equals(prodStr))
+        {
             isLL1 = false;
             parsingTable[row][col] += " | " + prodStr;
-        } else {
+        }
+        else
+        {
             parsingTable[row][col] = prodStr;
         }
     }
 
-    public void displayTable() {
+    public void displayTable()
+    {
         System.out.println("\nLL(1) Parsing Table");
-        
-
         System.out.print(String.format("%-15s", ""));
-        for (String t : grammar.terminals) {
+
+        for (String t : grammar.terminals)
+        {
             System.out.print(String.format("%-15s", t));
         }
         System.out.println();
 
-
         //for hot to print i used chat
-        for (int i = 0; i < grammar.nonTerminals.size(); i++) 
-            {
+        for (int i = 0; i < grammar.nonTerminals.size(); i++)
+        {
             System.out.print(String.format("%-15s", grammar.nonTerminals.get(i)));
-            for (int j = 0; j < grammar.terminals.size(); j++) {
+            for (int j = 0; j < grammar.terminals.size(); j++)
+            {
                 System.out.print(String.format("%-15s", parsingTable[i][j]));
             }
             System.out.println();

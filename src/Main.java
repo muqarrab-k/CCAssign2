@@ -24,15 +24,14 @@ public class Main {
             grammar.display();
             grammarFile.close();
 
-            // --- PROCESS FIRST & FOLLOW SETS ---
             FirstFollow ff = new FirstFollow(grammar);
-            ff.computeFirstSets();
-            ff.computeFollowSets();
+            ff.first();
+            ff.follow();
 
             PrintStream setsFile = new PrintStream(new FileOutputStream("output/first_follow_sets.txt"));
             System.setOut(setsFile);
-            ff.displayFirstSets();
-            ff.displayFollowSets();
+            ff.displayfirst();
+            ff.displayfollow();
             setsFile.close();
 
             // --- PROCESS PARSING TABLE ---
