@@ -101,6 +101,33 @@ Expr
 
 ==================================================
 
+Input String: id + id + id
+--- Parse Tree ---
+Expr
+  Term
+    Factor
+      id
+    TermDash
+      ε
+  ExprDash
+    +
+    Term
+      Factor
+        id
+      TermDash
+        ε
+    ExprDash
+      +
+      Term
+        Factor
+          id
+        TermDash
+          ε
+      ExprDash
+        ε
+
+==================================================
+
 Input String: id + * id
 --- Parse Tree ---
 Expr

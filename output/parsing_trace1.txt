@@ -108,3 +108,31 @@ RESULT: String Accepted Successfully!
 
 *************************************************************************************
 
+
+Parsing String: id + id + id
+Step  | Stack                          | Remaining Input      | Action
+-------------------------------------------------------------------------------------
+1     | [$, Expr]                      | id + id + id $       | Expr -> Term ExprDash
+2     | [$, ExprDash, Term]            | id + id + id $       | Term -> Factor TermDash
+3     | [$, ExprDash, TermDash, Factor] | id + id + id $       | Factor -> id
+4     | [$, ExprDash, TermDash, id]    | id + id + id $       | Match id
+5     | [$, ExprDash, TermDash]        | + id + id $          | TermDash -> epsilon
+6     | [$, ExprDash]                  | + id + id $          | ExprDash -> + Term ExprDash
+7     | [$, ExprDash, Term, +]         | + id + id $          | Match +
+8     | [$, ExprDash, Term]            | id + id $            | Term -> Factor TermDash
+9     | [$, ExprDash, TermDash, Factor] | id + id $            | Factor -> id
+10    | [$, ExprDash, TermDash, id]    | id + id $            | Match id
+11    | [$, ExprDash, TermDash]        | + id $               | TermDash -> epsilon
+12    | [$, ExprDash]                  | + id $               | ExprDash -> + Term ExprDash
+13    | [$, ExprDash, Term, +]         | + id $               | Match +
+14    | [$, ExprDash, Term]            | id $                 | Term -> Factor TermDash
+15    | [$, ExprDash, TermDash, Factor] | id $                 | Factor -> id
+16    | [$, ExprDash, TermDash, id]    | id $                 | Match id
+17    | [$, ExprDash, TermDash]        | $                    | TermDash -> epsilon
+18    | [$, ExprDash]                  | $                    | ExprDash -> epsilon
+19    | [$]                            | $                    | Accept
+
+RESULT: String Accepted Successfully!
+
+*************************************************************************************
+

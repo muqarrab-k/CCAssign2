@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-//add comments
+
 //keeps makingn first and follow set until it stops chnging
 public class FirstFollow
 {
@@ -9,11 +9,13 @@ public class FirstFollow
 
     public FirstFollow(Grammar g)
     {
-        this.grammar = g;
+        this.grammar = g; //initialise first grammar to read
     }
 
+    //keep finding first sets until they stop changing
     public void first()
     {
+        //non terminals
         for (int i = 0; i < grammar.nonTerminals.size(); i++)
         {
             first.add(new ArrayList<>());
@@ -31,7 +33,7 @@ public class FirstFollow
                 for (int j = 0; j < currentRules.size(); j++)
                 {
                     ArrayList<String> production = currentRules.get(j);
-                    
+                    //if production is epsilon add it to first set
                     if (production.size() == 1 && (production.get(0).equals("epsilon") || production.get(0).equals("@")))
                     {
                         addUnique(first.get(i), "epsilon");
@@ -42,7 +44,7 @@ public class FirstFollow
                     for (int k = 0; k < production.size(); k++)
                     {
                         String symbol = production.get(k);
-
+                        //if terminal first sybmbol add it ad stop looking further
                         if (!grammar.isNonTerminal(symbol))
                         {
                             addUnique(first.get(i), symbol);
@@ -51,6 +53,7 @@ public class FirstFollow
                         }
                         else
                         {
+                            //if non rterminal pull in first set
                             int ntIndex = grammar.findNonTerminalIndex(symbol);
                             ArrayList<String> symbolFirst = first.get(ntIndex);
                             
@@ -68,7 +71,7 @@ public class FirstFollow
                                 }
                             }
                             
-                            
+                            //if no epsilon stop checking (string vanishes if only epsilon)
                             if (!epsilonsymbol)
                             {
                                 epsilon = false;
@@ -76,24 +79,28 @@ public class FirstFollow
                             }
                         }
                     }
+                    //if epsilon then whole rule can be epsilon
                     if (epsilon)
                     {
                         addUnique(first.get(i), "epsilon");
                     }
                 }
+                //if set grows need to check again
                 if (first.get(i).size() != origsize)
                     changed = true;
             }
         }
     }
-
+    //keep finding follow sets until they stop chnging
     public void follow()
     {
+        //setup for non terminals
         for (int i = 0; i < grammar.nonTerminals.size(); i++)
         {
             follow.add(new ArrayList<>());
         }
 
+        //every start symbol gets $ in follow set atomaticalluy
         if (grammar.nonTerminals.size() > 0)
         {
             addUnique(follow.get(0), "$");
@@ -110,7 +117,7 @@ public class FirstFollow
                 for (int j = 0; j < rules.size(); j++)
                 {
                     ArrayList<String> production = rules.get(j);
-
+                    //check term after curr non terminal
                     for (int k = 0; k < production.size(); k++)
                     {
                         String B = production.get(k);
@@ -123,6 +130,7 @@ public class FirstFollow
                             boolean suffixepsilon = true;
                             for (int next = k + 1; next < production.size(); next++)
                             {
+                                //if next is terminal it belongs in follow set
                                 String nextSymbol = production.get(next);
                                 if (!grammar.isNonTerminal(nextSymbol))
                                 {
@@ -132,6 +140,7 @@ public class FirstFollow
                                 }
                                 else
                                 {
+                                    //if non terminal check follow of next term
                                     int nextnonterminal = grammar.findNonTerminalIndex(nextSymbol);
                                     ArrayList<String> nextFirst = first.get(nextnonterminal);
                                     
@@ -148,7 +157,7 @@ public class FirstFollow
                                             empty = true;
                                         }
                                     }
-                                    
+                                    //if not epsilon stop looking forward
                                     if (!empty)
                                     {
                                         suffixepsilon = false;
@@ -156,7 +165,7 @@ public class FirstFollow
                                     }
                                 }
                             }
-
+                            //if everything after b can vanish, b inherits the follow of lhs
                             if (suffixepsilon)
                             {
                                 ArrayList<String> followA = follow.get(i);
@@ -165,7 +174,7 @@ public class FirstFollow
                                     addUnique(follow.get(indexb), followA.get(m));
                                 }
                             }
-
+                            //if changes then loop again
                             if (follow.get(indexb).size() != origsize)
                                 changed = true;
                         }
@@ -175,7 +184,7 @@ public class FirstFollow
         }
     }
 
-    //first of whole seq of symbols
+    //first of whole seq of symbols to build parse tab;e
     public ArrayList<String> firstofsequence(ArrayList<String> sequence)
     {
         ArrayList<String> result = new ArrayList<>();

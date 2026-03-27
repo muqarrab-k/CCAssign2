@@ -134,6 +134,7 @@ public class Parser
         }
     }
 
+    //simpel hwo to build parse tba;le
     public void buildParsingTable()
     {
         if (!grammar.terminals.contains("$"))

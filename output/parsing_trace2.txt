@@ -13,12 +13,12 @@ Step  | Stack                          | Remaining Input      | Action
 7     | [$, ExprDash, Term, +]         | + * id $             | Match +
 8     | [$, ExprDash, Term]            | * id $               | ERROR!
 >>> ERROR: Empty Table Entry / Unexpected Symbol
-    Position: Token 3
-    Expected: Valid production for Term | Found: *
-    [Panic Mode] Synchronizing using FOLLOW(Term): [+, $, )]
-    [Panic Mode] Skipping unexpected token: *
-    [Panic Mode] Skipping unexpected token: id
-    [Panic Mode] Resuming parse at token: $
+Position: Token 3
+Expected: Valid production for Term | Found: *
+[Panic Mode] Synchronizing using FOLLOW(Term): [+, $, )]
+[Panic Mode] Skipping unexpected token: *
+[Panic Mode] Skipping unexpected token: id
+[Panic Mode] Resuming parse at token: $
 
 9     | [$, ExprDash]                  | $                    | ExprDash -> epsilon
 10    | [$]                            | $                    | Accept
@@ -53,8 +53,8 @@ Step  | Stack                          | Remaining Input      | Action
 20    | [$, ExprDash, TermDash, ), ExprDash] | $                    | ExprDash -> epsilon
 21    | [$, ExprDash, TermDash, )]     | $                    | ERROR!
 >>> ERROR: Missing Symbol
-    Position: Token 7
-    Expected: ) | Found: $
+Position: Token 7
+Expected: ) | Found: $
     [Recovery] Popping expected terminal ')' from stack.
 22    | [$, ExprDash, TermDash]        | $                    | TermDash -> epsilon
 23    | [$, ExprDash]                  | $                    | ExprDash -> epsilon
@@ -70,14 +70,14 @@ Step  | Stack                          | Remaining Input      | Action
 -------------------------------------------------------------------------------------
 1     | [$, Expr]                      | + id * id $          | ERROR!
 >>> ERROR: Empty Table Entry / Unexpected Symbol
-    Position: Token 1
-    Expected: Valid production for Expr | Found: +
-    [Panic Mode] Synchronizing using FOLLOW(Expr): [$, )]
-    [Panic Mode] Skipping unexpected token: +
-    [Panic Mode] Skipping unexpected token: id
-    [Panic Mode] Skipping unexpected token: *
-    [Panic Mode] Skipping unexpected token: id
-    [Panic Mode] Resuming parse at token: $
+Position: Token 1
+Expected: Valid production for Expr | Found: +
+[Panic Mode] Synchronizing using FOLLOW(Expr): [$, )]
+[Panic Mode] Skipping unexpected token: +
+[Panic Mode] Skipping unexpected token: id
+[Panic Mode] Skipping unexpected token: *
+[Panic Mode] Skipping unexpected token: id
+[Panic Mode] Resuming parse at token: $
 
 2     | [$]                            | $                    | Accept
 
@@ -103,8 +103,8 @@ Step  | Stack                          | Remaining Input      | Action
 12    | [$, ExprDash]                  | ) $                  | ExprDash -> epsilon
 13    | [$]                            | ) $                  | ERROR!
 >>> ERROR: Missing Symbol
-    Position: Token 4
-    Expected: $ | Found: )
+Position: Token 4
+Expected: $ | Found: )
     [Recovery] Popping expected terminal '$' from stack.
 
 *************************************************************************************

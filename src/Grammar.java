@@ -3,19 +3,23 @@ import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-public class Grammar {
-    public ArrayList<String> nonTerminals = new ArrayList<>();
+public class Grammar
+{
+    public ArrayList<String> nonterminals = new ArrayList<>();
     public ArrayList<ArrayList<ArrayList<String>>> allRules = new ArrayList<>();
     public ArrayList<String> terminals = new ArrayList<>();
     public String startSymbol = null;
 
-    public void loadFromFile(String filename) throws FileNotFoundException {
+    public void loadFromFile(String filename) throws FileNotFoundException
+    {
         File file = new File(filename);
         Scanner sc = new Scanner(file);
 
-        while (sc.hasNextLine()) {
+        while (sc.hasNextLine())
+        {
             String line = sc.nextLine().trim();
-            if (line.isEmpty()) continue;
+            if (line.isEmpty())
+                continue;
 
             String[] parts = line.split("->");
             String lhs = parts[0].trim();
@@ -25,9 +29,9 @@ public class Grammar {
 
             int index = findNonTerminalIndex(lhs);
             if (index == -1) {
-                nonTerminals.add(lhs);
+                nonterminals.add(lhs);
                 allRules.add(new ArrayList<>());
-                index = nonTerminals.size() - 1;
+                index = nonterminals.size() - 1;
             }
 
             String[] alternatives = rhsSection.split("\\|");
@@ -45,8 +49,8 @@ public class Grammar {
     }
 
     public int findNonTerminalIndex(String name) {
-        for (int i = 0; i < nonTerminals.size(); i++) {
-            if (nonTerminals.get(i).equals(name)) return i;
+        for (int i = 0; i < nonterminals.size(); i++) {
+            if (nonterminals.get(i).equals(name)) return i;
         }
         return -1;
     }
@@ -72,8 +76,8 @@ public class Grammar {
 
     public void display() {
         System.out.println("\n--- Grammar ---");
-        for (int i = 0; i < nonTerminals.size(); i++) {
-            System.out.print(nonTerminals.get(i) + " -> ");
+        for (int i = 0; i < nonterminals.size(); i++) {
+            System.out.print(nonterminals.get(i) + " -> ");
             ArrayList<ArrayList<String>> productions = allRules.get(i);
             for (int j = 0; j < productions.size(); j++) {
                 ArrayList<String> symbols = productions.get(j);
@@ -85,8 +89,8 @@ public class Grammar {
     }
 
     public void applyLeftFactoring() {
-        for (int i = 0; i < nonTerminals.size(); i++) {
-            String lhs = nonTerminals.get(i);
+        for (int i = 0; i < nonterminals.size(); i++) {
+            String lhs = nonterminals.get(i);
             ArrayList<ArrayList<String>> productions = allRules.get(i);
             for (int j = 0; j < productions.size(); j++) {
                 for (int k = j + 1; k < productions.size(); k++) {
@@ -98,7 +102,7 @@ public class Grammar {
                         String newNT = lhs + "Prime";
 
                         if (findNonTerminalIndex(newNT) == -1) {
-                            nonTerminals.add(newNT);
+                            nonterminals.add(newNT);
                             allRules.add(new ArrayList<>());
                         }
                         int newIndex = findNonTerminalIndex(newNT);
@@ -128,9 +132,9 @@ public class Grammar {
     }
 
     public void removeLeftRecursion() {
-        for (int i = 0; i < nonTerminals.size(); i++) {
+        for (int i = 0; i < nonterminals.size(); i++) {
             for (int j = 0; j < i; j++) {
-                String Aj = nonTerminals.get(j);
+                String Aj = nonterminals.get(j);
                 ArrayList<ArrayList<String>> Ai_rules = allRules.get(i);
                 ArrayList<ArrayList<String>> Aj_rules = allRules.get(j);
                 ArrayList<ArrayList<String>> new_Ai_rules = new ArrayList<>();
@@ -155,7 +159,7 @@ public class Grammar {
     }
 
     private void eliminateDirectLeftRecursion(int index) {
-        String lhs = nonTerminals.get(index);
+        String lhs = nonterminals.get(index);
         ArrayList<ArrayList<String>> rules = allRules.get(index);
         ArrayList<ArrayList<String>> alphas = new ArrayList<>();
         ArrayList<ArrayList<String>> betas = new ArrayList<>();
@@ -171,7 +175,7 @@ public class Grammar {
         if (alphas.isEmpty()) return;
 
         String newNT = lhs + "Dash";
-        nonTerminals.add(newNT);
+        nonterminals.add(newNT);
         ArrayList<ArrayList<String>> newNTRules = new ArrayList<>();
         allRules.add(newNTRules);
 

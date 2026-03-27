@@ -5,17 +5,17 @@ import java.io.PrintStream;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
-        try {
-            // 1. Save original console so we can print messages safely
+    public static void main(String[] input)
+    {
+        try
+        {
+            //Save original console so we can print messages safely
             PrintStream consoleOut = System.out;
-            
-            // 2. Create the output folder
+            // Create the output folder
             new File("output").mkdirs();
-
-            // --- PROCESS GRAMMAR ---
+            //process grammar
             Grammar grammar = new Grammar();
-            grammar.loadFromFile("input/grammar1.txt"); // Testing Grammar 2
+            grammar.loadFromFile("input/grammar1.txt"); //diff grammar files used
             grammar.applyLeftFactoring();
             grammar.removeLeftRecursion();
 
@@ -34,7 +34,7 @@ public class Main {
             ff.displayfollow();
             setsFile.close();
 
-            // --- PROCESS PARSING TABLE ---
+            //parsing table
             Parser parser = new Parser(grammar, ff);
             parser.buildParsingTable();
 
@@ -46,26 +46,26 @@ public class Main {
             }
             tableFile.close();
 
-            // --- PROCESS TRACES AND TREES ---
-            System.setOut(consoleOut); // Switch back to console briefly
+            //parse traces and trees
+            System.setOut(consoleOut);
             System.out.println("Processing Traces and extracting Parse Trees...");
 
-            // Open the parse_trees file so we can append all trees to it
+            //save tress to parse trace fileamd parse trees
             PrintStream treesFile = new PrintStream(new FileOutputStream("output/parse_trees.txt"));
 
             PrintStream trace1File = new PrintStream(new FileOutputStream("output/parsing_trace1.txt"));
             trace1File.println(">>> Valid Inputs Trace\n");
-            runParserAndSplitOutput(parser, "input/input_valid.txt", trace1File, treesFile);
+            runparser(parser, "input/input_valid.txt", trace1File, treesFile);
             trace1File.close();
 
             PrintStream trace2File = new PrintStream(new FileOutputStream("output/parsing_trace2.txt"));
             trace2File.println(">>> Error Recovery Trace\n");
-            runParserAndSplitOutput(parser, "input/input_errors.txt", trace2File, treesFile);
+            runparser(parser, "input/input_errors.txt", trace2File, treesFile);
             trace2File.close();
 
             treesFile.close();
 
-            // 3. Final Success Message
+            //done
             System.setOut(consoleOut);
             System.out.println("SUCCESS! The Traces and Trees have been successfully separated into their respective files.");
 
@@ -73,41 +73,43 @@ public class Main {
             System.err.println("Critical Error: " + e.getMessage());
         }
     }
-
-    /**
-     * Helper method: Captures parser output, splits the Trace and the Tree, 
-     * and writes them to their correct files.
-     */
-    private static void runParserAndSplitOutput(Parser parser, String filePath, PrintStream traceStream, PrintStream treeStream) {
+    //computers parsing idk
+    private static void runparser(Parser parser, String filePath, PrintStream traceStream, PrintStream treeStream)
+    {
         File file = new File(filePath);
-        if (!file.exists()) {
+        if (!file.exists())
+        {
             traceStream.println("    [!] File not found: " + filePath);
             return;
         }
 
-        try (Scanner scanner = new Scanner(file)) {
-            // Setup an output catcher
+        try (Scanner scanner = new Scanner(file))
+        {
+            //output catcher wtv that means
             PrintStream originalOut = System.out;
             ByteArrayOutputStream catcher = new ByteArrayOutputStream();
             PrintStream captureStream = new PrintStream(catcher);
 
-            while (scanner.hasNextLine()) {
+            while (scanner.hasNextLine())
+            {
                 String line = scanner.nextLine().trim();
-                if (!line.isEmpty()) {
-                    // 1. Tell Java to print to our "catcher" instead of the console
+                if (!line.isEmpty())
+                {
+                    //Tell Java to print to our "catcher" instead of the console
                     System.setOut(captureStream);
                     parser.parseInput(line);
-                    System.out.flush(); // Make sure everything is written
+                    System.out.flush(); //Make sure everything is written
                     
-                    // 2. Convert caught output to a string and clear the catcher for the next line
+                    //Convert caught output to a string and clear the catcher for the next line
                     String output = catcher.toString();
                     catcher.reset();
 
-                    // 3. Split the text at "--- Parse Tree ---"
+                    //split text at parse tree--
                     int treeIndex = output.indexOf("--- Parse Tree ---");
                     
-                    if (treeIndex != -1) {
-                        // We found a tree! Split it up.
+                    if (treeIndex != -1)
+                    {
+                        //plit if tree foiudn
                         String tracePart = output.substring(0, treeIndex);
                         String treePart = output.substring(treeIndex);
 
@@ -119,17 +121,21 @@ public class Main {
                         treeStream.println("Input String: " + line);
                         treeStream.print(treePart);
                         treeStream.println("\n" + "=".repeat(50) + "\n");
-                    } else {
-                        // If no tree was generated (e.g. fatal error), just dump to trace
+                    }
+                    else
+                    {
+                        //if fatal error dump trace
                         traceStream.print(output);
                         traceStream.println("\n" + "*".repeat(85) + "\n");
                     }
                 }
             }
-            // Restore normal printing just to be safe
+            //normal printing
             System.setOut(originalOut);
             
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             System.out.println("Error while testing parser: " + e.getMessage());
         }
     }
