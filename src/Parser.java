@@ -142,7 +142,7 @@ public class Parser
             grammar.terminals.add("$");
         }
 
-        int rows = grammar.nonTerminals.size();
+        int rows = grammar.nonterminals.size();
         int cols = grammar.terminals.size();
         parsingTable = new String[rows][cols];
 
@@ -155,7 +155,7 @@ public class Parser
         }
 
 
-        for (int i = 0; i < grammar.nonTerminals.size(); i++)
+        for (int i = 0; i < grammar.nonterminals.size(); i++)
         {
             ArrayList<ArrayList<String>> productions = grammar.allRules.get(i);
 
@@ -219,9 +219,9 @@ public class Parser
         System.out.println();
 
         //for hot to print i used chat
-        for (int i = 0; i < grammar.nonTerminals.size(); i++)
+        for (int i = 0; i < grammar.nonterminals.size(); i++)
         {
-            System.out.print(String.format("%-15s", grammar.nonTerminals.get(i)));
+            System.out.print(String.format("%-15s", grammar.nonterminals.get(i)));
             for (int j = 0; j < grammar.terminals.size(); j++)
             {
                 System.out.print(String.format("%-15s", parsingTable[i][j]));

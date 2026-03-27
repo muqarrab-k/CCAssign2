@@ -16,7 +16,7 @@ public class FirstFollow
     public void first()
     {
         //non terminals
-        for (int i = 0; i < grammar.nonTerminals.size(); i++)
+        for (int i = 0; i < grammar.nonterminals.size(); i++)
         {
             first.add(new ArrayList<>());
         }
@@ -25,7 +25,7 @@ public class FirstFollow
         while(changed)
         {
             changed = false;
-            for (int i = 0; i < grammar.nonTerminals.size(); i++)
+            for (int i = 0; i < grammar.nonterminals.size(); i++)
             {
                 int origsize = first.get(i).size();
                 ArrayList<ArrayList<String>> currentRules = grammar.allRules.get(i);
@@ -95,13 +95,13 @@ public class FirstFollow
     public void follow()
     {
         //setup for non terminals
-        for (int i = 0; i < grammar.nonTerminals.size(); i++)
+        for (int i = 0; i < grammar.nonterminals.size(); i++)
         {
             follow.add(new ArrayList<>());
         }
 
         //every start symbol gets $ in follow set atomaticalluy
-        if (grammar.nonTerminals.size() > 0)
+        if (grammar.nonterminals.size() > 0)
         {
             addUnique(follow.get(0), "$");
         }
@@ -110,7 +110,7 @@ public class FirstFollow
         while (changed)
         {
             changed = false;
-            for (int i = 0; i < grammar.nonTerminals.size(); i++)
+            for (int i = 0; i < grammar.nonterminals.size(); i++)
             {
                 ArrayList<ArrayList<String>> rules = grammar.allRules.get(i);
 
@@ -245,9 +245,9 @@ public class FirstFollow
     public void displayfirst()
     {
         System.out.println("\nFIRST Sets");
-        for (int i = 0; i < grammar.nonTerminals.size(); i++)
+        for (int i = 0; i < grammar.nonterminals.size(); i++)
         {
-            System.out.print("FIRST(" + grammar.nonTerminals.get(i) + ") = { ");
+            System.out.print("FIRST(" + grammar.nonterminals.get(i) + ") = { ");
             ArrayList<String> set = first.get(i);
             for (int j = 0; j < set.size(); j++)
             {
@@ -261,9 +261,9 @@ public class FirstFollow
     public void displayfollow()
     {
         System.out.println("\nFOLLOW Sets");
-        for (int i = 0; i < grammar.nonTerminals.size(); i++)
+        for (int i = 0; i < grammar.nonterminals.size(); i++)
         {
-            System.out.print("FOLLOW(" + grammar.nonTerminals.get(i) + ") = { ");
+            System.out.print("FOLLOW(" + grammar.nonterminals.get(i) + ") = { ");
             ArrayList<String> set = follow.get(i);
             for (int j = 0; j < set.size(); j++) 
             {
