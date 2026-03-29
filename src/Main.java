@@ -16,8 +16,8 @@ public class Main {
             //process grammar
             Grammar grammar = new Grammar();
             grammar.loadFromFile("input/grammar1.txt"); //diff grammar files used
-            grammar.applyLeftFactoring();
-            grammar.removeLeftRecursion();
+            grammar.leftfactoring();
+            grammar.leftrecursionremoval();
 
             PrintStream grammarFile = new PrintStream(new FileOutputStream("output/grammar_transformed.txt"));
             System.setOut(grammarFile);

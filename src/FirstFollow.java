@@ -54,7 +54,7 @@ public class FirstFollow
                         else
                         {
                             //if non rterminal pull in first set
-                            int ntIndex = grammar.findNonTerminalIndex(symbol);
+                            int ntIndex = grammar.nontermfind(symbol);
                             ArrayList<String> symbolFirst = first.get(ntIndex);
                             
                             boolean epsilonsymbol = false;
@@ -124,7 +124,7 @@ public class FirstFollow
 
                         if (grammar.isNonTerminal(B))
                         {
-                            int indexb = grammar.findNonTerminalIndex(B);
+                            int indexb = grammar.nontermfind(B);
                             int origsize = follow.get(indexb).size();
 
                             boolean suffixepsilon = true;
@@ -141,7 +141,7 @@ public class FirstFollow
                                 else
                                 {
                                     //if non terminal check follow of next term
-                                    int nextnonterminal = grammar.findNonTerminalIndex(nextSymbol);
+                                    int nextnonterminal = grammar.nontermfind(nextSymbol);
                                     ArrayList<String> nextFirst = first.get(nextnonterminal);
                                     
                                     boolean empty = false;
@@ -201,7 +201,7 @@ public class FirstFollow
             }
             else
             {
-                int index = grammar.findNonTerminalIndex(s);
+                int index = grammar.nontermfind(s);
                 ArrayList<String> f = first.get(index);
                 boolean hasEps = false;
                 for (int j = 0; j < f.size(); j++)

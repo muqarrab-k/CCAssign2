@@ -71,7 +71,7 @@ public class Parser
             //nonterminal Expansion
             else if (grammar.isNonTerminal(X))
             {
-                int row = grammar.findNonTerminalIndex(X);
+                int row = grammar.nontermfind(X);
                 int col = grammar.terminals.indexOf(a);
 
                 if (col == -1 || parsingTable[row][col].isEmpty())
